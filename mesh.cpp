@@ -23,7 +23,9 @@ mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // Fill-in data into the EBO
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_DYNAMIC_DRAW);
+
     // Set Vertex Attribute to explain OpenGL how to interpret the VBO
+    /*
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, position)));
     // Enable the Vertex Attribute 0 = position
     glEnableVertexAttribArray(0);
@@ -33,6 +35,19 @@ mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint
     // Set end enable Vertex Attribute 2 = Texture Coord
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, texcoord)));
     glEnableVertexAttribArray(2);
+    */
+
+    // Set Vertex Attribute to explain OpenGL how to interpret the VBO
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, position)));
+    // Enable the Vertex Attribute 0 = position
+    glEnableVertexAttribArray(0);
+    // Set end enable Vertex Attribute 1 = Vertex Colors
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, color)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, normal)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, texcoord)));
+    glEnableVertexAttribArray(3);
 
     // Bind VBO and VAO to 0 to prevent unintended modification
     glBindBuffer(GL_ARRAY_BUFFER, 0);

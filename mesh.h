@@ -25,7 +25,7 @@ public:
     glm::vec3 ambient_material, diffuse_material, specular_material;
     float specular_shinines;
 
-    mesh();
+    mesh() = default;
     mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive);
     mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive = GL_TRIANGLES);
 

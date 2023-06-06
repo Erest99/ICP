@@ -8,13 +8,13 @@ void make_triangle(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex
     Collider col1;
     std::vector<vertex> vertices = {
         // Top
-        {{ 0.0f,  2.0f,  3.0f}, {0.5f, 0.5f, 0.5f}, {0.5f, 0.5f}},
+        {{ 0.0f,  2.0f,  3.0f}, {0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 0.0f}, {0.5f, 0.5f}},
 
         // Base
-        {{-1.0f, -0.0f,  2.0f}, {0.5f, 0.5f, 0.5f}, {0.5f, 0.0f}},
-        {{ 1.0f, -0.0f,  2.0f}, {0.5f, 0.5f, 0.5f}, {1.0f, 0.5f}},
-        {{ 1.0f, -0.0f,  4.0f}, {0.5f, 0.5f, 0.5f}, {0.5f, 1.0f}},
-        {{-1.0f, -0.0f,  4.0f}, {0.5f, 0.5f, 0.5f}, {0.0f, 0.5f}},
+        {{-1.0f, -0.0f,  2.0f}, {0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 0.0f}, {0.5f, 0.0f}},
+        {{ 1.0f, -0.0f,  2.0f}, {0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.5f}},
+        {{ 1.0f, -0.0f,  4.0f}, {0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 0.0f}, {0.5f, 1.0f}},
+        {{-1.0f, -0.0f,  4.0f}, {0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.5f}},
     };
 
     std::vector<GLuint> indices = {
@@ -25,6 +25,20 @@ void make_triangle(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex
     2, 4, 1,
     4, 2, 3
     };
+
+    for (int i = 0; i < indices.size(); i += 3) {
+        glm::vec3 v0 = vertices[indices[i + 0]].position;
+        glm::vec3 v1 = vertices[indices[i + 1]].position;
+        glm::vec3 v2 = vertices[indices[i + 2]].position;
+
+        glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+        // Assign the computed normal to each vertex normal
+        vertices[indices[i + 0]].normal = normal;
+        vertices[indices[i + 1]].normal = normal;
+        vertices[indices[i + 2]].normal = normal;
+    }
+
     *indices_ptr = indices;
     *vertex_ptr = vertices;
 
@@ -43,10 +57,10 @@ void make_floor(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_pt
 
     Collider col1;
     std::vector<vertex> vertices = {
-        {{ -50.0f,  0.0f,  -50.0f}, {0.8f, 0.1f, 0.1f}, {0.5f, 0.5f}},
-        {{ 50.0f, 0.0f,  -50.0f}, {0.8f, 0.1f, 0.1f}, {0.5f, 0.0f}},
-        {{ -50.0f, 0.0f,  50.0f}, {0.8f, 0.1f, 0.1f}, {1.0f, 0.5f}},
-        {{ 50.0f, 0.0f,  50.0f}, {0.8f, 0.1f, 0.1f}, {0.5f, 1.0f}},
+        {{ -20.0f,  0.0f,  -20.0f}, {0.3f, 0.2f, 0.45f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+        {{ 20.0f, 0.0f,  -20.0f}, {0.4f, 0.2f, 0.4f}, {0.0f, 1.0f, 0.0f}, {50.0f, 0.0f}},
+        {{ -20.0f, 0.0f,  20.0f}, {0.4f, 0.2f, 0.4f}, {0.0f, 1.0f, 0.0f}, {50.0f, 50.0f}},
+        {{ 20.0f, 0.0f,  20.0f}, {0.6f, 0.2f, 0.4f}, {0.0f, 1.0f, 0.0f}, {0.0f, 50.0f}},
     };
 
     std::vector<GLuint> indices = {
@@ -69,14 +83,29 @@ void make_floor(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_pt
 void make_triangle2(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_ptr) {
     Collider col1;
     std::vector<vertex> vertices = {
-        //souradnice        //barva
-    { { 10.0f, 1.0f, 0.0f}, {0.8f,0.6f,0.1f}, {0.5f,1.0f} }, //vrchol
-    { { 9.5f, -0.0f, 0.5f}, {0.8f,0.6f,0.1f}, {0.0f,1.0f}}, //1.spodek
-    { { 9.5f, -0.0f, -0.5f}, {0.8f,0.6f,0.1f}, {0.0f,0.0f}}, //2.vrchol
-    { { 10.5f, -0.0f, -0.5f}, {0.8f,0.6f,0.1f}, {0.0f,1.0f}},
-    { { 10.5f, -0.0f, 0.5f}, {0.8f,0.6f,0.1f}, {0.0f,0.0f} }
+        //coordinates        //color           //normal, will be overwritten       //texture coords
+        { { 10.0f, 1.0f, 0.0f}, {0.8f,0.6f,0.1f}, {0.0f, 0.0f, 0.0f}, {0.5f,0.5f} },
+        { { 9.5f, -0.0f, 0.5f}, {0.8f,0.6f,0.1f}, {0.0f, 0.0f, 0.0f}, {0.0f,0.0f}},
+        { { 9.5f, -0.0f, -0.5f}, {0.8f,0.6f,0.1f}, {0.0f, 0.0f, 0.0f}, {1.0f,1.0f}},
+        { { 10.5f, -0.0f, -0.5f}, {0.8f,0.6f,0.1f}, {0.0f, 0.0f, 0.0f}, {0.0f,1.0f}},
+        { { 10.5f, -0.0f, 0.5f}, {0.8f,0.6f,0.1f}, {0.0f, 0.0f, 0.0f}, {1.0f,0.0f}}
     };
-    std::vector<GLuint> indices = { 0,2,1,  0,1,4,  0,4,3, 0,3,2 };
+
+    // Calculate normals for each face
+    glm::vec3 normal_0 = glm::normalize(glm::cross(vertices[2].position - vertices[0].position, vertices[1].position - vertices[0].position));
+    glm::vec3 normal_1 = glm::normalize(glm::cross(vertices[1].position - vertices[0].position, vertices[4].position - vertices[0].position));
+    glm::vec3 normal_2 = glm::normalize(glm::cross(vertices[4].position - vertices[0].position, vertices[3].position - vertices[0].position));
+    glm::vec3 normal_3 = glm::normalize(glm::cross(vertices[3].position - vertices[0].position, vertices[2].position - vertices[0].position));
+    glm::vec3 normal_4 = glm::normalize(glm::cross(vertices[1].position - vertices[2].position, vertices[3].position - vertices[2].position));
+
+    // Assign the normal to each vertex of each face
+    vertices[0].normal = normal_0;
+    vertices[1].normal = normal_1;
+    vertices[2].normal = normal_2;
+    vertices[3].normal = normal_3;
+    vertices[4].normal = normal_4;
+
+    std::vector<GLuint> indices = { 0,2,1, 0,1,4, 0,4,3, 0,3,2, 2,3,4, 1,2,4 };
     *indices_ptr = indices;
     *vertex_ptr = vertices;
 
@@ -94,18 +123,33 @@ void make_triangle2(std::vector<GLuint>* indices_ptr, std::vector<vertex>* verte
 void make_cube(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_ptr) {
     Collider col1;
     std::vector<vertex> vertices = {
-        //souradnice        //barva
-    { { 1.0f,0.0f,2.0f}, {0.0f,0.6f,0.8f}, {1.0f,1.0f}}, //0
-    { { 2.0f,0.0f,2.0f}, {0.0f,0.6f,0.8f}, {0.0f,1.0f}}, //1
-    { { 1.0f,0.0f,1.0f}, {0.0f,0.6f,0.8f}, {0.0f,1.0f}}, //2
-    { { 2.0f,0.0f,1.0f}, {0.0f,0.6f,0.8f}, {1.0f,1.0f}}, //3
-    { {1.0f,1.0f,2.0f}, {0.0f,0.6f,0.8f}, {1.0f,0.0f}},  //4
-    { {2.0f,1.0f,2.0f}, {0.0f,0.6f,0.8f}, {0.0f,0.0f}},  //5
-    { {2.0f,1.0f,1.0f}, {0.0f,0.6f,0.8f}, {1.0f,0.0f}},  //6
-    { { 1.0f,1.0f,1.0f}, {0.0f,0.6f,0.8f}, {0.0f,0.0f}}  //7
+        // Position         // Color         // Normal (will be overwritten) // Texture Coords
+        { { 1.0f,0.0f,2.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {1.0f,1.0f}}, //0
+        { { 2.0f,0.0f,2.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {0.0f,1.0f}}, //1
+        { { 1.0f,0.0f,1.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {0.0f,1.0f}}, //2
+        { { 2.0f,0.0f,1.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {1.0f,1.0f}}, //3
+        { {1.0f,1.0f,2.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {1.0f,0.0f}},  //4
+        { {2.0f,1.0f,2.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {0.0f,0.0f}},  //5
+        { {2.0f,1.0f,1.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {1.0f,0.0f}},  //6
+        { { 1.0f,1.0f,1.0f}, {0.0f,0.6f,0.8f}, {0.0f, 0.0f, 0.0f}, {0.0f,0.0f}}  //7
     };
 
-    std::vector<GLuint> indices = { 0,1,4,  1,5,4,  1,3,6,  6,5,1,  3,2,7, 7,6,3, 2,0,4, 4,7,2, 4,5,6, 6,7,4, 0,1,3, 3,2,0};
+    // Calculate normals for each face and assign to each vertex
+    std::vector<glm::vec3> face_normals = {
+        glm::normalize(glm::cross(vertices[1].position - vertices[0].position, vertices[4].position - vertices[0].position)), // 0, 1, 4
+        glm::normalize(glm::cross(vertices[3].position - vertices[1].position, vertices[6].position - vertices[1].position)), // 1, 3, 6
+        glm::normalize(glm::cross(vertices[2].position - vertices[3].position, vertices[7].position - vertices[3].position)), // 3, 2, 7
+        glm::normalize(glm::cross(vertices[0].position - vertices[2].position, vertices[4].position - vertices[2].position)), // 2, 0, 4
+        glm::normalize(glm::cross(vertices[5].position - vertices[4].position, vertices[6].position - vertices[4].position)), // 4, 5, 6
+        glm::normalize(glm::cross(vertices[1].position - vertices[0].position, vertices[3].position - vertices[0].position))  // 0, 1, 3
+    };
+
+    // Assign normals to vertices
+    for (int i = 0; i < 8; ++i) {
+        vertices[i].normal = face_normals[i / 2];
+    }
+
+    std::vector<GLuint> indices = { 0,1,4,  1,5,4,  1,3,6,  6,5,1,  3,2,7, 7,6,3, 2,0,4, 4,7,2, 4,5,6, 6,7,4, 0,1,3, 3,2,0 };
     *indices_ptr = indices;
     *vertex_ptr = vertices;
 
@@ -124,16 +168,31 @@ void make_cube(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_ptr
 void make_cube2(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_ptr) {
     Collider col1;
     std::vector<vertex> vertices = {
-        //souradnice        //barva
-    { { 5.0f,0.0f,2.0f}, {0.3f,0.6f,0.4f}, {1.0f,1.0f}}, //0
-    { { 6.0f,0.0f,2.0f}, {0.3f,0.6f,0.4f}, {0.0f,1.0f}}, //1
-    { { 5.0f,0.0f,1.0f}, {0.3f,0.6f,0.4f}, {0.0f,1.0f}}, //2
-    { { 6.0f,0.0f,1.0f}, {0.3f,0.6f,0.4f}, {1.0f,1.0f}}, //3
-    { {5.0f,1.0f,2.0f}, {0.3f,0.6f,0.4f}, {1.0f,0.0f}},  //4
-    { {6.0f,1.0f,2.0f}, {0.3f,0.6f,0.4f}, {0.0f,0.0f}},  //5
-    { {6.0f,1.0f,1.0f}, {0.3f,0.6f,0.4f}, {1.0f,0.0f}},  //6
-    { {5.0f,1.0f,1.0f}, {0.3f,0.6f,0.4f}, {0.0f,0.0f}}  //7
+        // Position         // Color         // Normal (will be overwritten) // Texture Coords
+        { { 5.0f,0.0f,2.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {1.0f,1.0f}}, //0
+        { { 6.0f,0.0f,2.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {0.0f,1.0f}}, //1
+        { { 5.0f,0.0f,1.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {0.0f,1.0f}}, //2
+        { { 6.0f,0.0f,1.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {1.0f,1.0f}}, //3
+        { {5.0f,1.0f,2.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {1.0f,0.0f}},  //4
+        { {6.0f,1.0f,2.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {0.0f,0.0f}},  //5
+        { {6.0f,1.0f,1.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {1.0f,0.0f}},  //6
+        { {5.0f,1.0f,1.0f}, {0.3f,0.6f,0.4f}, {0.0f, 0.0f, 0.0f}, {0.0f,0.0f}}  //7
     };
+
+    // Calculate normals for each face and assign to each vertex
+    std::vector<glm::vec3> face_normals = {
+        glm::normalize(glm::cross(vertices[1].position - vertices[0].position, vertices[4].position - vertices[0].position)), // 0, 1, 4
+        glm::normalize(glm::cross(vertices[3].position - vertices[1].position, vertices[6].position - vertices[1].position)), // 1, 3, 6
+        glm::normalize(glm::cross(vertices[2].position - vertices[3].position, vertices[7].position - vertices[3].position)), // 3, 2, 7
+        glm::normalize(glm::cross(vertices[0].position - vertices[2].position, vertices[4].position - vertices[2].position)), // 2, 0, 4
+        glm::normalize(glm::cross(vertices[5].position - vertices[4].position, vertices[6].position - vertices[4].position)), // 4, 5, 6
+        glm::normalize(glm::cross(vertices[1].position - vertices[0].position, vertices[3].position - vertices[0].position))  // 0, 1, 3
+    };
+
+    // Assign normals to vertices
+    for (int i = 0; i < 8; ++i) {
+        vertices[i].normal = face_normals[i / 2];
+    }
 
     std::vector<GLuint> indices = { 0,1,4,  1,5,4,  1,3,6,  6,5,1,  3,2,7, 7,6,3, 2,0,4, 4,7,2, 4,5,6, 6,7,4, 0,1,3, 3,2,0 };
     *indices_ptr = indices;
@@ -152,40 +211,6 @@ void make_cube2(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_pt
 }
 
 
-void make_circle(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_ptr) {
-    Collider col1;
-    std::vector<vertex> vertices = {
-   { {0.0f,0.0f,0.0f}, {1.0f,0.0f,0.0f} },
-    };
-    std::vector<GLuint> indices = { 0 };
-    int n = 30;
-    float r = 0.6f;
-    for (size_t i = 1; i <= n; i++)
-    {
-        float x = cos(2 * M_PI / n * i) * r;
-        float y = sin(2 * M_PI / n * i) * r;
-        vertex vert = { {x,y,0.0f}, {1.0f,0.0f,0.0f} };
-        vertices.push_back(vert);
-        indices.push_back(i);
-    };
-    float x = cos(2 * M_PI / n * 1) * r;
-    float y = sin(2 * M_PI / n * 1) * r;
-    vertex vert = { {x,y,0.0f}, {1.0f,0.0f,0.0f} };
-    vertices.push_back(vert);
-    indices.push_back(n + 1);
-    *indices_ptr = indices;
-    *vertex_ptr = vertices;
-
-    // Calculate AABB collider
-    glm::vec3 min = vertices[0].position;
-    glm::vec3 max = vertices[0].position;
-    for (const auto& v : vertices) {
-        min = glm::min(min, v.position);
-        max = glm::max(max, v.position);
-    }
-    col1 = { min, max };
-    globals.colliders.push_back(col1);
-}
 
 
 void make_checker(std::vector<GLuint>* indices_ptr, std::vector<vertex>* vertex_ptr, size_t number_of_col, size_t number_of_rows) {

@@ -4,5 +4,6 @@
 struct vertex {
     glm::vec3 position; // Vertex
     glm::vec3 color; // Color
-    glm::vec2 texcoord; //souradnice textury
+    glm::vec3 normal;
+    glm::vec2 texcoord;
 };

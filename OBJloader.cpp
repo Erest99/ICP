@@ -1,6 +1,7 @@
 #include "OBJloader.h"
 
 #define array_cnt(a) ((unsigned int)(sizeof(a)/sizeof(a[0])))
+extern s_globals globals;
 
 bool loadOBJ(const char* path, std::vector < glm::vec3 >& out_vertices, std::vector < glm::vec2 >& out_uvs, std::vector < glm::vec3 >& out_normals)
 {
@@ -104,4 +105,14 @@ void createMesh(const char* path, GLuint& shader_mesh, mesh& mesh_out, glm::vec3
 		i++;
 	};
 	mesh_out = mesh(shader_mesh, vertices, indices, GL_TRIANGLES);
+	Collider col1;
+	// Calculate AABB collider
+	glm::vec3 min = vertices[0].position;
+	glm::vec3 max = vertices[0].position;
+	for (const auto& v : vertices) {
+		min = glm::min(min, v.position);
+		max = glm::max(max, v.position);
+	}
+	col1 = { min, max };
+	globals.colliders.push_back(col1);
 }

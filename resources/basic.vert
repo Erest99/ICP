@@ -1,7 +1,8 @@
 #version 440
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor;
-layout (location = 2) in vec2 aTexcoord;
+layout (location = 2) in vec3 aNormal;
+layout (location = 3) in vec2 aTexcoord;
 
 uniform mat4 uP_m = mat4(1.0f);
 uniform mat4 uM_m = mat4(1.0f);

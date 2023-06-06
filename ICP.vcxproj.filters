@@ -39,7 +39,7 @@
     <ClCompile Include="texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Venca_final\ICP-main\ICP\OBJloader.cpp">
+    <ClCompile Include="OBJloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,7 +77,7 @@
     <ClInclude Include="collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Venca_final\ICP-main\ICP\OBJloader.h">
+    <ClInclude Include="OBJloader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -88,16 +88,16 @@
     <None Include="resources\basic.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\basic2.frag">
+    <None Include="..\..\Venca_final\ICP-main\ICP\resources\texture.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\basic2.vert">
+    <None Include="..\..\Venca_final\ICP-main\ICP\resources\texture.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\basic_checker.frag">
+    <None Include="..\..\Venca_final\ICP-main\ICP\resources\light.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\basic_checker.vert">
+    <None Include="..\..\Venca_final\ICP-main\ICP\resources\light2.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

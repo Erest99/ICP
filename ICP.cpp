@@ -93,9 +93,14 @@ int main() {
     mesh mesh_triangle = mesh(globals.shader["mesh"], vertex_mesh, indices_mesh,GL_TRIANGLES);
     mesh_triangle.add_texture_id("Images/tre.png",false);
 
+    mesh from_file = mesh();
+    createMesh("resources/box.obj", globals.shader["texture"], from_file, { 0.0f, 0.0f, 0.0f });
+    from_file.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 30.0);
+    from_file.add_texture_id("Images/brick.png", false);
+
     make_triangle2(&indices_mesh, &vertex_mesh);  
     mesh mesh_triangle2 = mesh(globals.shader["mesh"], vertex_mesh, indices_mesh, GL_TRIANGLES);
-    mesh_triangle2.add_texture_id("Images/test.png",false);
+    mesh_triangle2.add_texture_id("Images/test2.png",false);
 
     make_cube2(&indices_mesh, &vertex_mesh);  
     mesh mesh_cube2 = mesh(globals.shader["mesh"], vertex_mesh, indices_mesh, GL_TRIANGLES);
@@ -107,18 +112,10 @@ int main() {
 
     make_floor(&indices_mesh, &vertex_mesh);
     mesh mesh_floor = mesh(globals.shader["mesh"], vertex_mesh, indices_mesh, GL_TRIANGLES);
+    mesh_floor.add_texture_id("Images/wood.jpeg", false);
 
 
-    //make_checker(&indices_mesh, &vertex_mesh, 200, 200);
-    //mesh mesh_checker = mesh(globals.shader["mesh"], vertex_mesh, indices_mesh,GL_TRIANGLE_STRIP);
-
-    /*
-    mesh from_file = mesh();
-    createMesh("resources/from_file.obj", globals.shader["texture"], from_file, { 0.0f, 0.0f, 0.0f });
-    from_file.add_material({ 0.3f,0.15f,0.0f }, { 0.8f, 0.4f, 0.0f }, { 1.0f, 1.0f, 1.0f }, 30.0);
-    from_file.add_texture_id("Images/brick.png",false);
-    globals.mesh["from_file"] = from_file;
-    */
+    
 
     int frame_cnt = 0;
     double last_fps = glfwGetTime();
@@ -159,6 +156,8 @@ int main() {
         glm::mat4 m_m = glm::identity<glm::mat4>();
         glm::mat4 m_m2 = glm::identity<glm::mat4>();
         glm::mat4 m_m3 = glm::identity<glm::mat4>();
+        glm::mat4 m_m4 = glm::identity<glm::mat4>();
+        glm::mat4 m_m5 = glm::identity<glm::mat4>();
         glm::mat4 transform = glm::identity<glm::mat4>();
 
         //m_m = glm::scale(m_m, glm::vec3(5.0f));
@@ -169,7 +168,8 @@ int main() {
         //m_m = glm::translate(m_m, -center_of_rotation); // Step 3
 
         m_m = glm::translate(m_m, glm::vec3(3.0f, 0.0f, 4.0f) * 0.5f *std::sin((float)glfwGetTime()));
-
+        m_m5 = glm::translate(m_m5, glm::vec3(0.0f, 1.0f, 0.0f) * 0.2f * std::abs(std::sin((float)glfwGetTime())));
+        m_m4 = glm::translate(m_m4, glm::vec3(-10.0f, 1.0f, -4.0f));
         //transform = glm::translate(glm::identity<glm::mat4>(), glm::vec3(0.0f, 0.0f, 0.0f));
         //transform = glm::scale(transform, glm::vec3(5.0f));
         //transform = glm::translate(transform, center_of_rotation);
@@ -186,10 +186,11 @@ int main() {
 
         //m_m3 = glm::scale(m_m3, glm::vec3(3.0f));
         mesh_cube.draw(m_m3, v_m, projectionMatrix);
-        mesh_triangle2.draw(m_m3, v_m, projectionMatrix);
+        mesh_triangle2.draw(m_m5, v_m, projectionMatrix);
         mesh_triangle.draw(m_m, v_m, projectionMatrix);
         //mesh_checker.draw(m_m2, v_m, projectionMatrix);
         mesh_floor.draw(m_m2, v_m, projectionMatrix);
+        from_file.draw(m_m4, v_m, projectionMatrix);
         mesh_cube2.draw(m_m3, v_m, projectionMatrix);
         
         //m_m2 = glm::scale(m_m2, glm::vec3(10.0f));
@@ -204,6 +205,20 @@ int main() {
 
         globals.colliders[0] = {minPoint,maxPoint};
 
+        colPos = computeModelWorldPosition(from_file.vertices, m_m4);
+        colSize = glm::vec3(2.2f, 2.2f, 2.2f);
+        minPoint = colPos - (colSize * 0.5f);  // Calculate the minimum point of the AABB
+        maxPoint = colPos + (colSize * 0.5f);  // Calculate the maximum point of the AABB
+
+        globals.colliders[1] = { minPoint,maxPoint };
+        
+        colPos = computeModelWorldPosition(mesh_triangle2.vertices, m_m5);
+        colSize = glm::vec3(1.2f, 2.0f, 1.2f);
+        minPoint = colPos - (colSize * 0.5f);  // Calculate the minimum point of the AABB
+        maxPoint = colPos + (colSize * 0.5f);  // Calculate the maximum point of the AABB
+
+        globals.colliders[2] = { minPoint,maxPoint };
+        
 
         //---------------------------------------------------
 

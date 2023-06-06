@@ -9,6 +9,9 @@
 #include <GL/glew.h> 
 #include <glm/glm.hpp>
 #include "mesh.h"
+#include "globals.h"
+#include "collider.h"
+
 
 bool loadOBJ(
 	const char* path,
