@@ -1,6 +1,10 @@
 #pragma once
 #include <GLFW/glfw3.h> 
 #include <glm/glm.hpp> 
+#include "collider.h"
+#include <vector>
+#include <map>
+#include "mesh.h"
 
 struct s_globals {
     GLFWwindow* window;
@@ -16,4 +20,8 @@ struct s_globals {
     bool fullscreen;
     double last_update;
     glm::vec4 color;
+    std::map<std::string, GLuint> shader;
+    std::vector<Collider> colliders;
+    std::map<std::string, mesh> mesh;
+
 };

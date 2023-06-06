@@ -6,56 +6,33 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <opencv2\opencv.hpp>
 #include "vertex.h"
+#include "texture.h"
 
 struct vertex_p {
     glm::vec3 position;
 };
 
-// mesh classes
-class Mesh {};
 
-
-class mesh_p_c {
+class mesh {
 public:
     std::vector<vertex> vertices;
     std::vector<GLuint> indices;
     GLuint VAO;
     GLenum primitive;
     GLuint shader_id;
+    GLuint texture_id;
+    glm::mat4 model_matrix;
+    glm::vec3 ambient_material, diffuse_material, specular_material;
+    float specular_shinines;
 
-    mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive);
-    mesh_p_c(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive = GL_TRIANGLES);
+    mesh();
+    mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive);
+    mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive = GL_TRIANGLES);
 
-    void draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P) {
-        glUseProgram(shader_id);
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uP_m"), 1, GL_FALSE, glm::value_ptr(P));
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uV_m"), 1, GL_FALSE, glm::value_ptr(V));
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uM_m"), 1, GL_FALSE, glm::value_ptr(M));
-
-        glBindVertexArray(VAO);
-        glDrawElements(primitive, indices.size(), GL_UNSIGNED_INT, 0);
-    }
+    void add_texture_id(const char* path, bool transp);
+    void draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P);
+    void draw_with_material(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position);
+    void add_material(glm::vec3 ambient_material, glm::vec3 diffuse_material, glm::vec3 specular_material, float specular_shinines);
 };
 
-class mesh_p_m {
-public:
-    std::vector<vertex_p> vertices;
-    std::vector<GLuint> indices;
-    GLuint shader_id;
-    GLuint VAO;
-    GLenum primitive;
-    glm::vec4 material;
 
-    mesh_p_m(GLuint shader_id, std::vector<vertex_p>& vertices, std::vector<GLuint>& indices);
-
-    void draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P) {
-        glUseProgram(shader_id);
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uP_m"), 1, GL_FALSE, glm::value_ptr(P));
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uV_m"), 1, GL_FALSE, glm::value_ptr(V));
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "uM_m"), 1, GL_FALSE, glm::value_ptr(M));
-        glUniform4fv(glGetUniformLocation(shader_id, "material"), 1, glm::value_ptr(material));
-
-        glBindVertexArray(VAO);
-        glDrawElements(primitive, indices.size(), GL_UNSIGNED_INT, 0);
-    }
-};

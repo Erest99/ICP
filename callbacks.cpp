@@ -37,8 +37,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+        const int titleBarHeight = 30;
         if (globals.fullscreen) {
-            glfwSetWindowMonitor(window, nullptr, globals.window_xpos, globals.window_ypos, 800, 600, mode->refreshRate);
+            glfwSetWindowMonitor(window, nullptr, globals.window_xpos, globals.window_ypos+titleBarHeight, 800, 600, mode->refreshRate);
         }
         else {
             glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
