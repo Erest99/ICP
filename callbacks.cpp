@@ -9,6 +9,7 @@ void set_all_callbacks() {
     glfwSetKeyCallback(globals.window, key_callback);
     glfwSetCursorPosCallback(globals.window, cursor_position_callback);
     glfwSetMouseButtonCallback(globals.window, mouse_button_callback);
+    glfwSetScrollCallback(globals.window, scroll_callback);
 
     if (glfwExtensionSupported("GL_ARB_debug_output"))
     {
@@ -116,4 +117,24 @@ void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum se
         ", severity = " << severity_str <<
         ", ID = '" << id << '\'' <<
         ", message = '" << message << '\'' << std::endl;
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    // standard wheel = yoffset
+    globals.fov += 4 * yoffset; // each step is offset of 1.0, too small to use directly -> multiplier 
+    globals.fov = std::clamp(globals.fov, 20.0f, 170.0f); //limit to range 20...170
+    update_canvas_size(); // reset projection
+}
+void update_canvas_size()
+{
+    int width, height;
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+    float ratio = static_cast<float>(width) / height;
+    globals.projectionMatrix = glm::perspective(
+        glm::radians(globals.fov), // The vertical Field of View, in radians: the amount of "zoom". Think "camera lens". Usually between 90 (extra wide) and 30 (quite zoomed in)
+        ratio,                 // Aspect Ratio. Depends on the size of your window.
+        0.1f,                // Near clipping plane. Keep as big as possible, or you'll get precision issues.
+        20000.0f              // Far clipping plane. Keep as little as possible.
+    );
 }

@@ -14,6 +14,7 @@ struct s_globals {
     int window_ypos;
     int window_width;
     int window_height;
+    float fov = 60.0f;
     double mouse_xpos;
     double mouse_ypos;
     double app_start_time;
@@ -23,5 +24,6 @@ struct s_globals {
     std::map<std::string, GLuint> shader;
     std::vector<Collider> colliders;
     std::map<std::string, mesh> mesh;
+    glm::mat4 projectionMatrix;
 
 };

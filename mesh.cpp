@@ -82,11 +82,11 @@ void mesh::draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void mesh::draw_with_material(const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position) {
+void mesh::draw_with_material(const glm::mat4& M,const glm::mat4& V, const glm::mat4& P, const glm::vec3& light_position) {
     glUseProgram(shader_id);
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uP_m"), 1, GL_FALSE, glm::value_ptr(P));
     glUniformMatrix4fv(glGetUniformLocation(shader_id, "uV_m"), 1, GL_FALSE, glm::value_ptr(V));
-    glUniformMatrix4fv(glGetUniformLocation(shader_id, "uM_m"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader_id, "uM_m"), 1, GL_FALSE, glm::value_ptr(M));
 
     glUniform3fv(glGetUniformLocation(shader_id, "ambient_material"), 1, glm::value_ptr(ambient_material));
     glUniform3fv(glGetUniformLocation(shader_id, "diffuse_material"), 1, glm::value_ptr(diffuse_material));
@@ -97,7 +97,7 @@ void mesh::draw_with_material(const glm::mat4& V, const glm::mat4& P, const glm:
     //set texture unit
     glActiveTexture(GL_TEXTURE0);
     //send texture unit number to FS
-    glUniform1i(glGetUniformLocation(shader_id, "tex0"), 0);
+    glUniform1i(glGetUniformLocation(shader_id, "texure0"), 0);
     // draw object using VAO (Bind+DrawElements+Unbind)
     glBindVertexArray(VAO);
     glBindTexture(GL_TEXTURE_2D, texture_id);

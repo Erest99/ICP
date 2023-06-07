@@ -5,6 +5,7 @@
 #include "callbacks.h"
 #include "globals.h"
 #include "camera.h"
+#include <algorithm>
 
 void set_all_callbacks();
 void error_callback(int error, const char* description);
@@ -12,4 +13,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void fbsize_callback(GLFWwindow* window, int width, int height);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void update_canvas_size();
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
