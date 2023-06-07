@@ -1,5 +1,4 @@
 #include "mesh.h"
-#include <SOIL2.h>
 
 
 mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive)
@@ -7,7 +6,6 @@ mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint
 {
     GLuint VAO;
     GLuint VBO, EBO;
-
 
     // Generate the VAO and VBO
     glGenVertexArrays(1, &VAO);
@@ -23,20 +21,6 @@ mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     // Fill-in data into the EBO
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_DYNAMIC_DRAW);
-
-    // Set Vertex Attribute to explain OpenGL how to interpret the VBO
-    /*
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, position)));
-    // Enable the Vertex Attribute 0 = position
-    glEnableVertexAttribArray(0);
-    // Set end enable Vertex Attribute 1 = Vertex Colors
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, color)));
-    glEnableVertexAttribArray(1);
-    // Set end enable Vertex Attribute 2 = Texture Coord
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, texcoord)));
-    glEnableVertexAttribArray(2);
-    */
-
     // Set Vertex Attribute to explain OpenGL how to interpret the VBO
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(0 + offsetof(vertex, position)));
     // Enable the Vertex Attribute 0 = position
@@ -61,8 +45,14 @@ mesh::mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint
 }
 
 void mesh::add_texture_id(const char* path, bool transp) {
-    //this->texture_id = generate_texture(path, false, false);
     this->texture_id = textureInit(path, false, transp);
+}
+
+void mesh::add_material(glm::vec3 ambient_material, glm::vec3 diffuse_material, glm::vec3 specular_material, float specular_shinines) {
+    this->ambient_material = ambient_material;
+    this->diffuse_material = diffuse_material;
+    this->specular_material = specular_material;
+    this->specular_shinines = specular_shinines;
 }
 
 void mesh::draw(const glm::mat4& M, const glm::mat4& V, const glm::mat4& P) {
@@ -105,11 +95,6 @@ void mesh::draw_with_material(const glm::mat4& M,const glm::mat4& V, const glm::
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void mesh::add_material(glm::vec3 ambient_material, glm::vec3 diffuse_material, glm::vec3 specular_material, float specular_shinines) {
-    this->ambient_material = ambient_material;
-    this->diffuse_material = diffuse_material;
-    this->specular_material = specular_material;
-    this->specular_shinines = specular_shinines;
-}
+
 
 

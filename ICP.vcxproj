@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="ICP.cpp" />
     <ClCompile Include="init.cpp" />
     <ClCompile Include="mesh.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="camera2.h" />
     <ClInclude Include="collider.h" />
+    <ClInclude Include="collision.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="init.h" />
     <ClInclude Include="mesh.h" />

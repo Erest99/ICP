@@ -26,7 +26,6 @@ public:
     float specular_shinines;
 
     mesh() = default;
-    mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint& VAO, GLuint primitive);
     mesh(GLuint shader_type, std::vector<vertex>& vertices, std::vector<GLuint>& indices, GLuint primitive = GL_TRIANGLES);
 
     void add_texture_id(const char* path, bool transp);
